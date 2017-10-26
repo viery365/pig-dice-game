@@ -29,7 +29,7 @@ body {
   color: #555;
 }
 
-.wrapper {
+#wrapper {
   width: 1000px;
   position: absolute;
   top: 50%;
@@ -40,8 +40,8 @@ body {
   overflow: hidden;
 }
 
-.player-0-panel,
-.player-1-panel {
+#player-0-panel,
+#player-1-panel {
   width: 50%;
   float: left;
   height: 600px;
@@ -147,19 +147,19 @@ i {
   transition: margin 0.3s;
 }
 
-.btn-new {
+#btn-new {
   top: 45px;
 }
 
-.btn-roll {
+#btn-roll {
   top: 403px;
 }
 
-.btn-hold {
+#btn-hold {
   top: 467px;
 }
 
-.dice {
+#dice {
   position: absolute;
   left: 50%;
   top: 178px;
