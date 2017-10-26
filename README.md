@@ -1,5 +1,7 @@
 # DOM Pig Game
-A javaScript game created for [The Complete JavaScript Course: Build a Real-World Project](https://www.udemy.com/the-complete-javascript-course/) on Udemy.
+A javaScript game included in [The Complete JavaScript Course: Build a Real-World Project](https://www.udemy.com/the-complete-javascript-course/) by Jonas Schmedtmann on Udemy.
+
+I am building on it.
 
 ![Screenshot Preview](img/screenshot-readme.jpg)
 
