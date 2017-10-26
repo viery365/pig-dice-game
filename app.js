@@ -14,8 +14,8 @@ document.getElementById("btn-roll").addEventListener("click", function() {
     //3. Update the round score but only if the rolled number was not a 1
     if (dice !== 1) {
       roundScore += dice;
-      document.querySelector(
-        "#current-" + activePlayer
+      document.getElementById(
+        "current-" + activePlayer
       ).textContent = roundScore;
     } else {
       nextPlayer();
@@ -29,12 +29,12 @@ document.getElementById("btn-hold").addEventListener("click", function() {
     scores[activePlayer] += roundScore;
 
     //Update the UI
-    document.querySelector("#score-" + activePlayer).textContent =
+    document.getElementById("score-" + activePlayer).textContent =
       scores[activePlayer];
 
     //Check if player won the game
     if (scores[activePlayer] >= 100) {
-      document.querySelector("#name-" + activePlayer).textContent = "Winner!";
+      document.getElementById("name-" + activePlayer).textContent = "Winner!";
       document.getElementById("dice").style.display = "none";
       document
         .getElementById("player-" + activePlayer + "-panel")
