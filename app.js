@@ -1,5 +1,41 @@
 var scores, roundScore, activePlayer, gamePlaying;
 
+function init() {
+  scores = [0, 0];
+  activePlayer = 0;
+  roundScore = 0;
+  gamePlaying = true;
+  var doc = document;
+  var player0Panel = doc.getElementById("player-0-panel");
+  var player1Panel = doc.getElementById("player-1-panel");
+
+  doc.getElementById("dice").style.display = "none";
+  doc.getElementById("score-0").textContent = "0";
+  doc.getElementById("score-1").textContent = "0";
+  doc.getElementById("current-0").textContent = "0";
+  doc.getElementById("current-1").textContent = "0";
+  doc.getElementById("name-0").textContent = "Player 1";
+  doc.getElementById("name-1").textContent = "Player 2";
+  player0Panel.classList.remove("winner");
+  player1Panel.classList.remove("winner");
+  player0Panel.classList.remove("active");
+  player1Panel.classList.remove("active");
+  player0Panel.classList.add("active");
+}
+
+function nextPlayer() {
+  var doc = document;
+  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+  roundScore = 0;
+  doc.getElementById("current-0").textContent = "0";
+  doc.getElementById("current-1").textContent = "0";
+
+  doc.getElementById("player-0-panel").classList.toggle("active");
+  doc.getElementById("player-1-panel").classList.toggle("active");
+
+  doc.getElementById("dice").style.display = "none";
+}
+
 init();
 
 document.getElementById("btn-roll").addEventListener("click", function() {
@@ -49,40 +85,4 @@ document.getElementById("btn-hold").addEventListener("click", function() {
   }
 });
 
-function nextPlayer() {
-  var doc = document;
-  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
-  roundScore = 0;
-  doc.getElementById("current-0").textContent = "0";
-  doc.getElementById("current-1").textContent = "0";
-
-  doc.getElementById("player-0-panel").classList.toggle("active");
-  doc.getElementById("player-1-panel").classList.toggle("active");
-
-  doc.getElementById("dice").style.display = "none";
-}
-
 document.getElementById("btn-new").addEventListener("click", init);
-
-function init() {
-  scores = [0, 0];
-  activePlayer = 0;
-  roundScore = 0;
-  gamePlaying = true;
-  var doc = document;
-  var player0Panel = doc.getElementById("player-0-panel");
-  var player1Panel = doc.getElementById("player-1-panel");
-
-  doc.getElementById("dice").style.display = "none";
-  doc.getElementById("score-0").textContent = "0";
-  doc.getElementById("score-1").textContent = "0";
-  doc.getElementById("current-0").textContent = "0";
-  doc.getElementById("current-1").textContent = "0";
-  doc.getElementById("name-0").textContent = "Player 1";
-  doc.getElementById("name-1").textContent = "Player 2";
-  player0Panel.classList.remove("winner");
-  player1Panel.classList.remove("winner");
-  player0Panel.classList.remove("active");
-  player1Panel.classList.remove("active");
-  player0Panel.classList.add("active");
-}
