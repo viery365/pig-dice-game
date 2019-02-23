@@ -1,25 +1,25 @@
-import React, { Component, Fragment } from "react";
-import PropTypes from "prop-types";
-import dice1 from "../img/dice-1.png";
-import dice2 from "../img/dice-2.png";
-import dice3 from "../img/dice-3.png";
-import dice4 from "../img/dice-4.png";
-import dice5 from "../img/dice-5.png";
-import dice6 from "../img/dice-6.png";
+import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import dice1 from '../img/dice-1.png';
+import dice2 from '../img/dice-2.png';
+import dice3 from '../img/dice-3.png';
+import dice4 from '../img/dice-4.png';
+import dice5 from '../img/dice-5.png';
+import dice6 from '../img/dice-6.png';
 
 const dice = [];
 
 dice.push(dice1, dice2, dice3, dice4, dice5, dice6);
 
 function PlayerPanel(props) {
-  const { id } = props;
+  const { id, score } = props;
   return (
     <div id={`player-${id}-panel`} className={props.active}>
       <div className="player-name" id={`name-${id}`}>
-        Player {id + 1}
+        {score >= 100 ? 'Winner!' : `Player ${id + 1}`}
       </div>
       <div className="player-score" id={`score-${id}`}>
-        {props.score}
+        {score}
       </div>
       <div className="player-current-box">
         <div className="player-current-label">Current</div>
@@ -45,7 +45,7 @@ function Controllers(props) {
         <i className="ion-ios-loop" />
         Roll dice
       </button>
-      <button id="btn-hold">
+      <button id="btn-hold" onClick={props.onHold}>
         <i className="ion-ios-download-outline" />
         Hold
       </button>
@@ -67,9 +67,29 @@ class App extends Component {
       playerOneCurrentScore: 0,
       playerTwoCurrentScore: 0,
       gamePlaying: true,
+      diceNumber: null
     };
 
     this.rollDice = this.rollDice.bind(this);
+    this.holdScore = this.holdScore.bind(this);
+  }
+
+  hideDiceNumber() {
+    this.setState(() => ({ diceNumber: null }));
+  }
+
+  addPlayerScore() {
+    this.setState(() => ({
+      playerOneScore: this.state.playerOneScore + this.state.playerOneCurrentScore,
+      playerTwoScore: this.state.playerTwoScore + this.state.playerTwoCurrentScore
+    }));
+  }
+
+  holdScore() {
+    if (this.state.gamePlaying) {
+      this.addPlayerScore();
+      this.hideDiceNumber();
+    }
   }
 
   nextPlayer(diceNumber) {
@@ -77,7 +97,7 @@ class App extends Component {
       diceNumber,
       activePlayer: this.state.activePlayer === 1 ? 2 : 1,
       playerOneCurrentScore: this.state.playerOneCurrentScore && 0,
-      playerTwoCurrentScore: this.state.playerTwoCurrentScore && 0,
+      playerTwoCurrentScore: this.state.playerTwoCurrentScore && 0
     }));
   }
 
@@ -114,23 +134,23 @@ class App extends Component {
         </button>
         <PlayerPanel
           id={0}
-          active={this.state.activePlayer === 1 ? "active" : ""}
+          active={this.state.activePlayer === 1 ? 'active' : ''}
           score={this.state.playerOneScore}
           current={this.state.playerOneCurrentScore}
         />
         <PlayerPanel
           id={1}
-          active={this.state.activePlayer === 2 ? "active" : ""}
+          active={this.state.activePlayer === 2 ? 'active' : ''}
           score={this.state.playerTwoScore}
           current={this.state.playerTwoCurrentScore}
         />
-        <Controllers onRoll={this.rollDice} />
+        <Controllers onRoll={this.rollDice} onHold={this.holdScore} />
         {this.state.diceNumber && (
           <img
             src={dice[this.state.diceNumber - 1]}
             alt="Dice"
             id="dice"
-            style={{ display: "block" }}
+            style={{ display: 'block' }}
           />
         )}
       </div>
