@@ -13,10 +13,11 @@ dice.push(dice1, dice2, dice3, dice4, dice5, dice6);
 
 function PlayerPanel(props) {
   const { id, score } = props;
+  const maxScore = 100;
   return (
-    <div id={`player-${id}-panel`} className={props.active}>
+    <div id={`player-${id}-panel`} className={props.active + (score >= maxScore ? 'winner' : '')}>
       <div className="player-name" id={`name-${id}`}>
-        {score >= 100 ? 'Winner!' : `Player ${id + 1}`}
+        {score >= maxScore ? 'Winner!' : `Player ${id + 1}`}
       </div>
       <div className="player-score" id={`score-${id}`}>
         {score}
