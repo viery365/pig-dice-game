@@ -13,11 +13,10 @@ dice.push(dice1, dice2, dice3, dice4, dice5, dice6);
 
 function PlayerPanel(props) {
   const { id, score, winner } = props;
-  const winnerIsActive = winner && winner === id + 1;
   return (
-    <div id={`player-${id}-panel`} className={props.active + (winnerIsActive ? 'winner' : '')}>
+    <div id={`player-${id}-panel`} className={props.active + (winner === id ? 'winner' : '')}>
       <div className="player-name" id={`name-${id}`}>
-        {winnerIsActive ? 'Winner!' : `Player ${id + 1}`}
+        {winner === id ? 'Winner!' : `Player ${id + 1}`}
       </div>
       <div className="player-score" id={`score-${id}`}>
         {score}
@@ -56,7 +55,8 @@ function Controllers(props) {
 }
 
 Controllers.propTypes = {
-  onRoll: PropTypes.func.isRequired
+  onRoll: PropTypes.func.isRequired,
+  onHold: PropTypes.func.isRequired
 };
 
 class App extends Component {
@@ -65,7 +65,7 @@ class App extends Component {
     this.state = {
       playerOneScore: 0,
       playerTwoScore: 0,
-      activePlayer: 1,
+      activePlayer: 0,
       playerOneCurrentScore: 0,
       playerTwoCurrentScore: 0,
       gamePlaying: true,
@@ -78,20 +78,21 @@ class App extends Component {
   }
 
   checkWinner() {
-    const playerOneWinner = this.state.playerOneScore >= 100;
-    const playerTwoWinner = this.state.playerTwoScore >= 100;
+    const maxScore = 100;
+    const playerOneWinner = this.state.playerOneScore >= maxScore;
+    const playerTwoWinner = this.state.playerTwoScore >= maxScore;
     if (playerOneWinner || playerTwoWinner) {
       this.setState(() => {
         return {
-          winner: playerOneWinner ? 1 : 2,
-          activePlayer: 0
+          winner: playerOneWinner ? 0 : 1,
+          activePlayer: null,
+          diceNumber: null,
+          gamePlaying: false
         };
       });
+    } else {
+      this.nextPlayer();
     }
-  }
-
-  hideDice() {
-    this.setState(() => ({ diceNumber: null }));
   }
 
   addPlayerScore() {
@@ -107,21 +108,20 @@ class App extends Component {
   holdScore() {
     if (this.state.gamePlaying) {
       this.addPlayerScore();
-      this.hideDice();
     }
   }
 
   nextPlayer(diceNumber) {
     this.setState(() => ({
       diceNumber,
-      activePlayer: this.state.activePlayer === 1 ? 2 : 1,
+      activePlayer: this.state.activePlayer === 0 ? 1 : 0,
       playerOneCurrentScore: this.state.playerOneCurrentScore && 0,
       playerTwoCurrentScore: this.state.playerTwoCurrentScore && 0
     }));
   }
 
   setCurrentScore(diceNumber) {
-    if (this.state.activePlayer === 1) {
+    if (this.state.activePlayer === 0) {
       return this.setState(() => ({
         diceNumber,
         playerOneCurrentScore: this.state.playerOneCurrentScore + diceNumber
@@ -145,6 +145,8 @@ class App extends Component {
   }
 
   render() {
+    const playerOne = 0;
+    const playerTwo = 1;
     return (
       <div id="wrapper" className="clearfix">
         <button id="btn-new">
@@ -152,15 +154,15 @@ class App extends Component {
           New game
         </button>
         <PlayerPanel
-          id={0}
-          active={this.state.activePlayer === 1 ? 'active' : ''}
+          id={playerOne}
+          active={this.state.activePlayer === playerOne ? 'active ' : ''}
           score={this.state.playerOneScore}
           current={this.state.playerOneCurrentScore}
           winner={this.state.winner}
         />
         <PlayerPanel
-          id={1}
-          active={this.state.activePlayer === 2 ? 'active' : ''}
+          id={playerTwo}
+          active={this.state.activePlayer === playerTwo ? 'active ' : ''}
           score={this.state.playerTwoScore}
           current={this.state.playerTwoCurrentScore}
           winner={this.state.winner}
