@@ -12,12 +12,12 @@ const dice = [];
 dice.push(dice1, dice2, dice3, dice4, dice5, dice6);
 
 function PlayerPanel(props) {
-  const { id, score } = props;
-  const maxScore = 100;
+  const { id, score, winner } = props;
+  const winnerIsActive = winner && winner === id + 1;
   return (
-    <div id={`player-${id}-panel`} className={props.active + (score >= maxScore ? 'winner' : '')}>
+    <div id={`player-${id}-panel`} className={props.active + (winnerIsActive ? 'winner' : '')}>
       <div className="player-name" id={`name-${id}`}>
-        {score >= maxScore ? 'Winner!' : `Player ${id + 1}`}
+        {winnerIsActive ? 'Winner!' : `Player ${id + 1}`}
       </div>
       <div className="player-score" id={`score-${id}`}>
         {score}
@@ -36,7 +36,8 @@ PlayerPanel.propTypes = {
   id: PropTypes.number.isRequired,
   active: PropTypes.string.isRequired,
   score: PropTypes.number.isRequired,
-  current: PropTypes.number.isRequired
+  current: PropTypes.number.isRequired,
+  winner: PropTypes.number
 };
 
 function Controllers(props) {
@@ -68,11 +69,25 @@ class App extends Component {
       playerOneCurrentScore: 0,
       playerTwoCurrentScore: 0,
       gamePlaying: true,
-      diceNumber: null
+      diceNumber: null,
+      winner: null
     };
 
     this.rollDice = this.rollDice.bind(this);
     this.holdScore = this.holdScore.bind(this);
+  }
+
+  checkWinner() {
+    const playerOneWinner = this.state.playerOneScore >= 100;
+    const playerTwoWinner = this.state.playerTwoScore >= 100;
+    if (playerOneWinner || playerTwoWinner) {
+      this.setState(() => {
+        return {
+          winner: playerOneWinner ? 1 : 2,
+          activePlayer: 0
+        };
+      });
+    }
   }
 
   hideDice() {
@@ -80,10 +95,13 @@ class App extends Component {
   }
 
   addPlayerScore() {
-    this.setState(() => ({
-      playerOneScore: this.state.playerOneScore + this.state.playerOneCurrentScore,
-      playerTwoScore: this.state.playerTwoScore + this.state.playerTwoCurrentScore
-    }));
+    this.setState(
+      () => ({
+        playerOneScore: this.state.playerOneScore + this.state.playerOneCurrentScore,
+        playerTwoScore: this.state.playerTwoScore + this.state.playerTwoCurrentScore
+      }),
+      this.checkWinner
+    );
   }
 
   holdScore() {
@@ -138,12 +156,14 @@ class App extends Component {
           active={this.state.activePlayer === 1 ? 'active' : ''}
           score={this.state.playerOneScore}
           current={this.state.playerOneCurrentScore}
+          winner={this.state.winner}
         />
         <PlayerPanel
           id={1}
           active={this.state.activePlayer === 2 ? 'active' : ''}
           score={this.state.playerTwoScore}
           current={this.state.playerTwoCurrentScore}
+          winner={this.state.winner}
         />
         <Controllers onRoll={this.rollDice} onHold={this.holdScore} />
         {this.state.diceNumber && (
