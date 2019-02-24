@@ -74,7 +74,7 @@ class App extends Component {
     this.holdScore = this.holdScore.bind(this);
   }
 
-  hideDiceNumber() {
+  hideDice() {
     this.setState(() => ({ diceNumber: null }));
   }
 
@@ -88,7 +88,7 @@ class App extends Component {
   holdScore() {
     if (this.state.gamePlaying) {
       this.addPlayerScore();
-      this.hideDiceNumber();
+      this.hideDice();
     }
   }
 
