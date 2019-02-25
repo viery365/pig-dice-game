@@ -8,9 +8,7 @@ import dice4 from '../img/dice-4.png';
 import dice5 from '../img/dice-5.png';
 import dice6 from '../img/dice-6.png';
 
-const dice = [];
-
-dice.push(dice1, dice2, dice3, dice4, dice5, dice6);
+const dice = [dice1, dice2, dice3, dice4, dice5, dice6];
 
 function PlayerPanel(props) {
   const { id, score, winner } = props;
