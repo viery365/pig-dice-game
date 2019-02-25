@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+
 import dice1 from '../img/dice-1.png';
 import dice2 from '../img/dice-2.png';
 import dice3 from '../img/dice-3.png';
@@ -59,23 +60,28 @@ Controllers.propTypes = {
   onHold: PropTypes.func.isRequired
 };
 
+const initialState = {
+  playerOneScore: 0,
+  playerTwoScore: 0,
+  activePlayer: 0,
+  playerOneCurrentScore: 0,
+  playerTwoCurrentScore: 0,
+  gamePlaying: true,
+  diceNumber: null,
+  winner: null
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      playerOneScore: 0,
-      playerTwoScore: 0,
-      activePlayer: 0,
-      playerOneCurrentScore: 0,
-      playerTwoCurrentScore: 0,
-      gamePlaying: true,
-      diceNumber: null,
-      winner: null
-    };
-
+    this.state = initialState;
     this.rollDice = this.rollDice.bind(this);
     this.holdScore = this.holdScore.bind(this);
   }
+
+  resetState = () => {
+    this.setState(initialState);
+  };
 
   checkWinner() {
     const maxScore = 100;
@@ -149,7 +155,7 @@ class App extends Component {
     const playerTwo = 1;
     return (
       <div id="wrapper" className="clearfix">
-        <button id="btn-new">
+        <button id="btn-new" onClick={this.resetState}>
           <i className="ion-ios-plus-outline" />
           New game
         </button>
